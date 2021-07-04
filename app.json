@@ -1,0 +1,12 @@
+{
+  "name": "traincounter",
+  "displayName": "train-counter",
+  "expo": {
+    "name": "train-counter",
+    "slug": "train-counter",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
