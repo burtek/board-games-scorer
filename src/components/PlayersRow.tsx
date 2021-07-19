@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { useAppearance } from '../hooks/use-appearance';
+import { StyleSheet, useColorScheme, View } from 'react-native';
 import { Player, PlayerColor } from '../logic/players';
 import { Button } from './Button';
 
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
 });
 
 export function PlayersRow(props: Props) {
-    const appearance = useAppearance();
+    const colorScheme = useColorScheme();
 
     const mapToButton = useCallback(
         (player: Player) => (
@@ -44,7 +43,7 @@ export function PlayersRow(props: Props) {
                         borderColor: PlayerColor[player]
                     },
                     player === props.current &&
-                        (appearance.colorScheme === 'dark' ? styles.selectedButtonLight : styles.selectedButtonDark)
+                        (colorScheme === 'dark' ? styles.selectedButtonLight : styles.selectedButtonDark)
                 ]}
                 textStyle={styles.buttonText}>
                 {props.points[player]}

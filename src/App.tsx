@@ -1,11 +1,10 @@
 import zipObject from 'lodash/zipObject';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, useColorScheme, View } from 'react-native';
 import { PlayersRow } from './components/PlayersRow';
 import { RoutesRow } from './components/RoutesRow';
 import { TrainsRow } from './components/TrainsRow';
 import { europeConfig } from './configs';
-import { useAppearance } from './hooks/use-appearance';
 import { Player } from './logic/players';
 import { TrainButton } from './logic/trains';
 
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
 });
 
 export default function App() {
-    const { colorScheme } = useAppearance();
+    const colorScheme = useColorScheme();
 
     const [config] = useState(europeConfig);
     const [currentPlayer, setCurrentPlayer] = useState(config.players[0]);

@@ -1,8 +1,15 @@
 import type { ReactText } from 'react';
 import React from 'react';
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import { useAppearance } from '../hooks/use-appearance';
+import {
+    StyleProp,
+    StyleSheet,
+    Text,
+    TextStyle,
+    TouchableWithoutFeedback,
+    useColorScheme,
+    View,
+    ViewStyle
+} from 'react-native';
 
 export const BUTTON_DIVIDER = 8;
 
@@ -31,7 +38,7 @@ function isReactText(arg: unknown): arg is ReactText {
 }
 
 export function Button(props: Props) {
-    const { colorScheme } = useAppearance();
+    const colorScheme = useColorScheme();
 
     return (
         <TouchableWithoutFeedback onPress={() => props.onPress()}>
