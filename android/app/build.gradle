@@ -94,7 +94,7 @@ apply from: "../../node_modules/expo-updates/scripts/create-manifest-android.gra
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = false
+def enableSeparateBuildPerCPUArchitecture = true
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.traincounter"
+        applicationId "ovh.dtrw.apps.scorer"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -152,6 +152,16 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+        }
+        release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword System.getenv("MYAPP_UPLOAD_STORE_PASSWORD")
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword System.getenv("MYAPP_UPLOAD_KEY_PASSWORD")
+            } else {
+                throw new GradleException('no release upload keystore')
+            }
         }
     }
     buildTypes {

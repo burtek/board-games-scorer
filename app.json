@@ -1,12 +1,13 @@
 {
-  "name": "traincounter",
-  "displayName": "train-counter",
-  "expo": {
-    "name": "train-counter",
-    "slug": "train-counter",
-    "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
-  }
+    "name": "Board Games Scorer",
+    "displayName": "Board Games Scorer",
+    "expo": {
+        "name": "Board Games Scorer",
+        "slug": "board-games-scorer",
+        "version": "1.0.0",
+        "assetBundlePatterns": ["**/*"],
+        "android": {
+            "versionCode": 1
+        }
+    }
 }
