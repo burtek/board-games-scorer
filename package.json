@@ -43,6 +43,9 @@
         "typescript": "~4.3.5"
     },
     "jest": {
-        "preset": "react-native"
+        "preset": "react-native",
+        "setupFilesAfterEnv": [
+            "<rootDir>/config/setupTests.ts"
+        ]
     }
 }

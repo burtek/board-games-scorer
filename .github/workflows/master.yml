@@ -1,10 +1,9 @@
-name: Continuous Integration
+name: Master commit
 
 on:
-  pull_request:
+  push:
     branches:
       - master
-      - dev
 
 jobs:
   check-and-test:
@@ -22,7 +21,7 @@ jobs:
         run: |
           yarn test --ci --coverage
 
-  build:
+  build-and-deploy:
     needs: check-and-test
     runs-on: ubuntu-latest
     steps:
@@ -40,5 +39,13 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/
+          name: app-release.aab
+          path: android/app/build/outputs/bundle/release/
+      - name: Upload app-release.aab to Google Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
+          packageName: ovh.dtrw.apps.scorer
+          releaseFile: android/app/build/outputs/bundle/release/app-release.aab
+          track: production
+    
