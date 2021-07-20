@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - master
+      - dev
 
 jobs:
   check-version-bumped:
@@ -71,7 +72,7 @@ jobs:
           releaseFile: ${{ github.workspace }}/android/app/build/outputs/bundle/release/app-release.aab
 
   upload-to-play-store:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
     steps:
