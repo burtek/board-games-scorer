@@ -1,0 +1,99 @@
+name: Main workflow
+
+on:
+  pull_request:
+    branches:
+      - master
+      - dev
+  push:
+    branches:
+      - master
+
+jobs:
+  check-version-bumped:
+    if: github.event_name == 'pull_request' && github.base_ref == 'master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting the repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install yarn dependencies
+        run: |
+          yarn install --ci
+      - name: Check bump
+        run: |
+          yarn checkbump
+
+
+  tscheck-and-test:
+    runs-on: ubuntu-latest
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    steps:
+      - name: Getting the repo
+        uses: actions/checkout@v2
+      - name: Install yarn dependencies
+        run: |
+          yarn install --ci
+          yarn global add codecov
+      - name: Check TypeScript
+        run: |
+          yarn tscheck
+      - name: Test
+        run: |
+          yarn test --ci --coverage && $(yarn global bin)/codecov
+
+  build:
+    needs: tscheck-and-test
+    runs-on: ubuntu-latest
+    env:
+      MYAPP_UPLOAD_KEY_PASSWORD: ${{ secrets.MYAPP_UPLOAD_KEY_PASSWORD }}
+      MYAPP_UPLOAD_STORE_PASSWORD: ${{ secrets.MYAPP_UPLOAD_STORE_PASSWORD }}
+    steps:
+      - name: Getting the repo
+        uses: actions/checkout@v2
+      - name: Install React Native CLI
+        run: |
+          yarn global add react-native-cli
+      - name: Install yarn dependencies
+        run: |
+          yarn install --ci
+      - name: Build Android Release
+        run: |
+          cd android
+          chmod +x ./gradlew
+          ./gradlew bundleRelease
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release.apk
+          releaseFile: ${{ github.workspace }}/android/app/build/outputs/bundle/release/app-release.aab
+
+  upload-to-play-store:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: app-release.aab
+      - name: Upload production app-release.aab to Google Play Store
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: r0adkll/upload-google-play@v1
+        with:
+          track: production
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: ovh.dtrw.apps.scorer
+          releaseFile: ${{ github.workspace }}/app-release.
+      - name: Upload staging app-release.aab to Google Play Store
+        if: ${{ github.ref == 'refs/heads/dev' }}
+        uses: r0adkll/upload-google-play@v1
+        with:
+          track: internal
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: ovh.dtrw.apps.scorer
+          releaseFile: ${{ github.workspace }}/app-release.
+    
+

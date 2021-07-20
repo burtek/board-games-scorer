@@ -8,7 +8,8 @@
         "test": "jest",
         "tscheck": "tsc --noEmit",
         "postversion": "react-native-version -A --target android",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "checkbump": "node ./checkVersionBumped.mjs"
     },
     "dependencies": {
         "@react-native-community/masked-view": "0.1.10",
@@ -30,22 +31,28 @@
     },
     "devDependencies": {
         "@babel/core": "~7.9.6",
+        "@suin/typed-regexp": "^1.0.0",
         "@testing-library/react-hooks": "^7.0.1",
         "@types/jest": "^26.0.24",
         "@types/lodash": "^4.14.171",
+        "@types/node": "^16.4.0",
         "@types/react": "~16.9.56",
         "@types/react-native": "~0.63.52",
         "@types/react-test-renderer": "^17.0.1",
+        "@types/semver": "^7.3.7",
         "babel-preset-expo": "8.3.0",
         "husky": "^7.0.1",
         "jest-expo": "^42.0.1",
         "react-native-version": "^4.0.0",
+        "semver": "^7.3.5",
         "typescript": "~4.3.5"
     },
     "jest": {
         "preset": "react-native",
         "setupFilesAfterEnv": [
             "<rootDir>/config/setupTests.ts"
-        ]
+        ],
+        "coverageDirectory": "./coverage/",
+        "collectCoverage": false
     }
 }
