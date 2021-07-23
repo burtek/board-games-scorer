@@ -1,0 +1,1 @@
+export { europeConfig } from './europe';
