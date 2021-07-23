@@ -94,6 +94,6 @@ jobs:
           track: internal
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: ovh.dtrw.apps.scorer
-          releaseFiles: ${{ github.workspace }}/app-release.aab
+          releaseFiles: app-release.aab
     
 
