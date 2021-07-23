@@ -67,7 +67,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: app-release.apk
+          name: app-release.aab
           path: ${{ github.workspace }}/android/app/build/outputs/bundle/release/app-release.aab
 
   upload-to-play-store:
