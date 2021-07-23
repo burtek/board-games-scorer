@@ -8,7 +8,6 @@ on:
   push:
     branches:
       - master
-      - dev
 
 jobs:
   check-version-bumped:
@@ -69,7 +68,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app-release.apk
-          releaseFile: ${{ github.workspace }}/android/app/build/outputs/bundle/release/app-release.aab
+          path: ${{ github.workspace }}/android/app/build/outputs/bundle/release/app-release.aab
 
   upload-to-play-store:
     if: github.event_name == 'push'
@@ -81,20 +80,20 @@ jobs:
         with:
           name: app-release.aab
       - name: Upload production app-release.aab to Google Play Store
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: github.ref == 'refs/heads/master'
         uses: r0adkll/upload-google-play@v1
         with:
           track: production
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: ovh.dtrw.apps.scorer
-          releaseFile: ${{ github.workspace }}/app-release.
+          releaseFiles: ${{ github.workspace }}/app-release.aab
       - name: Upload staging app-release.aab to Google Play Store
-        if: ${{ github.ref == 'refs/heads/dev' }}
+        if: github.ref != 'refs/heads/master'
         uses: r0adkll/upload-google-play@v1
         with:
           track: internal
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: ovh.dtrw.apps.scorer
-          releaseFile: ${{ github.workspace }}/app-release.
+          releaseFiles: ${{ github.workspace }}/app-release.aab
     
 
